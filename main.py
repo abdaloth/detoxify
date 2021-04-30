@@ -25,7 +25,7 @@ TOK_PATH = "serialized/tokenizer.pickle"
 MODEL_PATH = "serialized/tf2_cpu_friendly_model.h5"
 MAXLEN = 200  # more than 99th percentile
 
-LABELS = ["toxicity", "severe_toxicity", "identity_attack", "insult", "threat"]
+LABELS = ["Toxicity", "Severe Toxicity", "Identity Attack", "Insult", "Threat"]
 
 print("loading tokenizer..")
 with open(TOK_PATH, "rb") as handle:
