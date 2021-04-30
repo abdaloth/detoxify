@@ -1,4 +1,5 @@
-tensorflow==1.14.0
-numpy==1.19.1
-flask==1.1.2
-keras==2.2.4
+h5py==2.10.0
+tensorflow
+numpy
+flask
+keras

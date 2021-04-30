@@ -1,8 +1,10 @@
-from locust import FastHttpUser, TaskSet, task
+from locust import FastHttpUser, task
 import json
 
 class APIUser(FastHttpUser):
-
+    """
+    Simulated API user for load testing
+    """
     @task
     def create_post(self):
         headers = {'content-type': 'application/json','Accept-Encoding':'gzip'}
