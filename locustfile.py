@@ -4,15 +4,21 @@ import json
 
 class APIUser(FastHttpUser):
     """
-    Simulated API user for load testing
+    Simulated API user for load testing.
+
+    Only has one action, which is calling the single endpoint.
     """
 
     @task
-    def create_post(self):
-        headers = {"content-type": "application/json", "Accept-Encoding": "gzip"}
+    def predict(self):
+        headers = {'content-type': 'application/json','Accept-Encoding':'gzip'}
         self.client.post(
-            "/secret_add",
-            data=json.dumps({"a": 5, "b": 6}),
+            "/predict",
+            data= json.dumps(
+                {
+                    "text": "if you don't load test, you're an absolute buffoon!" # model detects toxicity
+                }
+            ),
             headers=headers,
-            name="Add Numbers",
+            name = "Predict Toxicity"
         )
