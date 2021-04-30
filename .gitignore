@@ -1,3 +1,7 @@
+# Model weights and tokenizer
+cpu_friendly_model.h5
+tokenizer.pickle
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
