@@ -1,5 +1,5 @@
 locust: # Use with make locust host=<host>
-	locust --host ${host} --locustfile locustfile.py
+	locust --host $(host) --locustfile locustfile.py
 
 install:
 	pip install --upgrade pip
