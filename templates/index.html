@@ -3,44 +3,59 @@
     <!-- Compiled and minified materialize JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <style type="text/css">
-        @import url("https://fonts.googleapis.com/css?family=Rakkas&subset=arabic");
-        @import url("https://fonts.googleapis.com/css?family=Cairo&subset=arabic");
-
         body {
-            background-color: #0F9D58;
+            background-color: #232425;
             color: #f3f3f3;
         }
 
-        h1 {
-            font-size: 68px;
-            padding: 1em;
-            letter-spacing: -1px;
-            line-height: 1.05;
-            font-family: "Rakkas", cursive;
-            font-size: 7vmax;
-            font-weight: normal;
-            letter-spacing: normal;
-            text-align: center;
-        }
-
         p {
-            font-family: "Cairo";
             text-align: center;
             font-size: 3vmax;
+        }
+        .input-field input:focus + label {
+            color: white !important;
+        }
+        .input-field [type=text] {
+            color: white;
+        }
+        .bar_container {
+            width: 100%;
+            /* Full width */
+            background-color: #515152;
+            /* Grey background */
+        }
+
+        .pred {
+            text-align: right;
+            white-space: nowrap;
+            /* Right-align text */
+            padding-top: 10px;
+            /* Add top padding */
+            padding-bottom: 10px;
+            /* Add bottom padding */
+            color: white;
+            /* White text color */
         }
     </style>
 </head>
 
 <body class="container row center">
-    <h1 class="ar"><span>إيثان شوارتزنتروبر</span></h1>
-    <p>Simple Flask</p>
-    <form action="{{ url_for('add')}}" method="post">
-        <input type="text" name="a" placeholder="A" required="required" />
-        <input type="text" name="b" placeholder="B" required="required" />
-        <button type="submit" class="btn waves-effect waves-light red darken-3">Add</button>
-    </form>
+    <h1 class="header center">Detect Comment Toxicity</h1>
+    <div class="input-field">
+        <form action="{{ url_for('predict')}}" method="post">
+            <input type="text" name="text" placeholder="" required="required" />
+            <button type="submit" class="btn waves-effect waves-light cyan darken-1">Evaluate</button>
+        </form>
+    </div>
     <div>
-        {{ result_text }}
+        <h4>{{text}}</h4>
+
+        {%for key, value in prediction%}
+        <div class="bar_container">
+            <div class="pred" style="width:{{value}}%; background-color: #00838f;">{{key}} {{value}}%</div>
+        </div>
+        <p> </p>
+        {%endfor%}
     </div>
 
 

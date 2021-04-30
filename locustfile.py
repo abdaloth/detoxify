@@ -1,6 +1,7 @@
 from locust import FastHttpUser, task
 import json
 
+
 class APIUser(FastHttpUser):
     """
     Simulated API user for load testing.

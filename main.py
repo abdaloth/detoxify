@@ -16,18 +16,25 @@ import pickle
 import re
 import tensorflow as tf
 
-graph = tf.get_default_graph()
-
 
 app = Flask(__name__)
 
 LINKS_re = re.compile(r"https?://.+?(\s|$)")
 NONALPHANUMERIC_re = re.compile(r"[^\w ]")
 TOK_PATH = "serialized/tokenizer.pickle"
-MODEL_PATH = "serialized/cpu_friendly_model.h5"
+MODEL_PATH = "serialized/tf2_cpu_friendly_model.h5"
 MAXLEN = 200  # more than 99th percentile
 
-LABELS = ["toxicity", "severe_toxicity", "identity_attack", "insult", "threat"]
+LABELS = ["Toxicity", "Severe Toxicity", "Identity Attack", "Insult", "Threat"]
+
+print("loading tokenizer..")
+with open(TOK_PATH, "rb") as handle:
+    tokenizer = pickle.load(handle)
+
+print("loading model..")
+model = load_model(MODEL_PATH)
+
+print("done")
 
 
 def clean_text(comment):
@@ -50,23 +57,17 @@ def hello():
     return render_template("index.html")
 
 
-@app.route("/add", methods=["POST"])
-def add():
-    """"""
+@app.route("/predict", methods=["POST"])
+def predict():
     form_inputs = request.form.to_dict()
-    result = int(form_inputs["a"]) + int(form_inputs["b"])
-
-    return render_template("index.html", result_text=f"A + B = {result}")
-
-
-@app.route("/secret_add", methods=["POST"])
-def secret_add():
-    data = request.get_json()
-    if data is None:
-        return jsonify({"error": "Missing input"}), 400
-    a = int(data.get("a", 0))
-    b = int(data.get("b", 0))
-    return jsonify({"result": a + b})
+    text = form_inputs["text"]
+    model_input = preprocess([text])
+    prediction = model.predict(model_input, batch_size=1, verbose=0).flatten()
+    prediction = {
+        label: str(round(res * 100)) for (label, res) in zip(LABELS, prediction)
+    }
+    print(prediction)
+    return render_template("index.html", text=text, prediction=prediction.items())
 
 
 @app.route("/api/predict", methods=["POST"])
@@ -76,19 +77,10 @@ def api_predict():
         return jsonify({"error": "Missing input"}), 400
     text = data.get("text", "N/A")
     model_input = preprocess([text])
-    with graph.as_default():
-        prediction = model.predict(model_input, batch_size=1, verbose=0).flatten()
+    prediction = model.predict(model_input, batch_size=1, verbose=0).flatten()
 
     return jsonify({label: str(res) for (label, res) in zip(LABELS, prediction)})
 
 
 if __name__ == "__main__":
-    print("loading tokenizer..")
-    with open(TOK_PATH, "rb") as handle:
-        tokenizer = pickle.load(handle)
-
-    print("loading model..")
-    model = load_model(MODEL_PATH)
-
-    print("done")
     app.run(host="127.0.0.1", port=8080, debug=True)
