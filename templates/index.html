@@ -1,0 +1,50 @@
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified materialize JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <style type="text/css">
+        @import url("https://fonts.googleapis.com/css?family=Rakkas&subset=arabic");
+        @import url("https://fonts.googleapis.com/css?family=Cairo&subset=arabic");
+
+        body {
+            background-color: #0F9D58;
+            color: #f3f3f3;
+        }
+
+        h1 {
+            font-size: 68px;
+            padding: 1em;
+            letter-spacing: -1px;
+            line-height: 1.05;
+            font-family: "Rakkas", cursive;
+            font-size: 7vmax;
+            font-weight: normal;
+            letter-spacing: normal;
+            text-align: center;
+        }
+
+        p {
+            font-family: "Cairo";
+            text-align: center;
+            font-size: 3vmax;
+        }
+    </style>
+</head>
+
+<body class="container row center">
+    <h1 class="ar"><span>إيثان شوارتزنتروبر</span></h1>
+    <p>Simple Flask</p>
+    <form action="{{ url_for('add')}}" method="post">
+        <input type="text" name="a" placeholder="A" required="required" />
+        <input type="text" name="b" placeholder="B" required="required" />
+        <button type="submit" class="btn waves-effect waves-light red darken-3">Add</button>
+    </form>
+    <div>
+        {{ result_text }}
+    </div>
+
+
+</body>
+
+
+</form>
