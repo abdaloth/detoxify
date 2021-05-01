@@ -18,7 +18,6 @@ import tensorflow as tf
 
 from tensorflow.python.lib.io import file_io
 
-
 app = Flask(__name__)
 
 LINKS_re = re.compile(r"https?://.+?(\s|$)")
@@ -31,7 +30,11 @@ MAXLEN = 200  # more than 99th percentile
 
 LABELS = ["Toxicity", "Severe Toxicity", "Identity Attack", "Insult", "Threat"]
 
-def load_from_gs(gs_path, local_path):
+def load_from_gs(gs_path, local_path): # TODO this uses a tf io method, does it work for the pickle?
+    """
+    Load a file from google storage into a local path.
+    """
+
     gs_file = file_io.FileIO(gs_path, mode='rb')
     local_file = open(local_path, 'wb')
 
