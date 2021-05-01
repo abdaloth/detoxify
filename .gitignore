@@ -1,3 +1,5 @@
+.DS_Store
+
 # Model weights and tokenizer
 cpu_friendly_model.h5
 tokenizer.pickle
