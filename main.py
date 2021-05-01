@@ -22,7 +22,7 @@ app = Flask(__name__)
 
 LINKS_re = re.compile(r"https?://.+?(\s|$)")
 NONALPHANUMERIC_re = re.compile(r"[^\w ]")
-MODEL_GS = "gs://detoxify/cpu_firendly_model.h5"
+MODEL_GS = "gs://detoxify/tf2_cpu_friendly_model.h5"
 TOK_GS = "gs://detoxify/tokenizer.pickle"
 TOK_PATH = "tokenizer.pickle"
 MODEL_PATH = "cpu_friendly_model.h5"
