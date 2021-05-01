@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: detoxify
+  namespace: default
+  labels:
+    app: detoxify
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    protocol: TCP
+    name: detoxify-http
+  selector:
+    app: detoxify

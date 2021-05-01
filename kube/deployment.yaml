@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: detoxify
+  namespace: default
+  labels:
+    app: detoxify
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: detoxify
+  template:
+    metadata:
+      labels:
+        app: detoxify
+    spec:
+      containers:
+      - name: detoxify-server
+        image: "abdaloth/detoxify"
+        imagePullPolicy: IfNotPresent
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 20
+          periodSeconds: 5
+          failureThreshold: 10
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        resources:
+          requests:
+            cpu: "2"
+            memory: 4Gi
