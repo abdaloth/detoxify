@@ -18,6 +18,14 @@ import tensorflow as tf
 
 from tensorflow.python.lib.io import file_io
 
+# GCP logger setup
+import google.cloud.logging
+client = google.cloud.logging.Client()
+client.get_default_handler()
+client.setup_logging()
+
+import logging as log
+
 app = Flask(__name__)
 
 LINKS_re = re.compile(r"https?://.+?(\s|$)")
@@ -42,18 +50,20 @@ def load_from_gs(gs_path, local_path): # TODO this uses a tf io method, does it 
     local_file.close()
     gs_file.close()
 
+log.info("Downloading model from storage.")
 load_from_gs(MODEL_GS, MODEL_PATH)
+
+log.info("Downloading tokenizer from storage.")
 load_from_gs(TOK_GS, TOK_PATH)
 
-print("Loading Tokenizer..")
+log.info("Loading Tokenizer")
 with open(TOK_PATH, "rb") as handle:
     tokenizer = pickle.load(handle)
 
-print("Loading Model..")
+log.info("Loading Model")
 model = load_model(MODEL_PATH)
 
-
-print("Loaded model and tokenizer.")
+log.info("Successfully loaded model and tokenizer")
 
 
 def clean_text(comment):
@@ -85,7 +95,7 @@ def predict():
     prediction = {
         label: str(round(res * 100)) for (label, res) in zip(LABELS, prediction)
     }
-    print(prediction)
+    log.info(f"Prediction: {prediction}")
     return render_template("index.html", text=text, prediction=prediction.items())
 
 
