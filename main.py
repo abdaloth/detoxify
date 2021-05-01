@@ -16,25 +16,41 @@ import pickle
 import re
 import tensorflow as tf
 
+from tensorflow.python.lib.io import file_io
+
 
 app = Flask(__name__)
 
 LINKS_re = re.compile(r"https?://.+?(\s|$)")
 NONALPHANUMERIC_re = re.compile(r"[^\w ]")
-TOK_PATH = "serialized/tokenizer.pickle"
-MODEL_PATH = "serialized/tf2_cpu_friendly_model.h5"
+MODEL_GS = "gs://detoxify/cpu_firendly_model.h5"
+TOK_GS = "gs://detoxify/tokenizer.pickle"
+TOK_PATH = "tokenizer.pickle"
+MODEL_PATH = "cpu_friendly_model.h5"
 MAXLEN = 200  # more than 99th percentile
 
 LABELS = ["Toxicity", "Severe Toxicity", "Identity Attack", "Insult", "Threat"]
 
-print("loading tokenizer..")
+def load_from_gs(gs_path, local_path):
+    gs_file = file_io.FileIO(gs_path, mode='rb')
+    local_file = open(local_path, 'wb')
+
+    local_file.write(gs_file.read())
+    local_file.close()
+    gs_file.close()
+
+load_from_gs(MODEL_GS, MODEL_PATH)
+load_from_gs(TOK_GS, TOK_PATH)
+
+print("Loading Tokenizer..")
 with open(TOK_PATH, "rb") as handle:
     tokenizer = pickle.load(handle)
 
-print("loading model..")
+print("Loading Model..")
 model = load_model(MODEL_PATH)
 
-print("done")
+
+print("Loaded model and tokenizer.")
 
 
 def clean_text(comment):
