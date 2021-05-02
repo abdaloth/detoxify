@@ -1,5 +1,5 @@
 # detoxify
-A scalable model that detects the level of toxicity in comments
+A scalable model that detects the level of toxicity in comments, trained on [Jigsaw's dataset](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification/data).
 
 ![](demo.png)
 
